@@ -1,4 +1,4 @@
-token = '1739168654:AAGNZoEpFfxUgJtSby3FnRupcOLikkk1Hv8'
+token = '1755114031:AAGiJz1R3BL3gdUuJzxyp0JVtnuR3RN0VR4'
 
 data = {
     '110-БД' : 'http://www.fa.ru/fil/ufa/student/Bak_och/110БД.rtf',
