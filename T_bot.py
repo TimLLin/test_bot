@@ -2,7 +2,7 @@ import telebot
 import main
 from telebot import types
 
-bot = telebot.TeleBot(main.token)
+bot = telebot.TeleBot('1782052770:AAEuTYmwFszzA97utccxH4ZXoKfXeXf3TXI')
 
 @bot.message_handler(commands=['start'])
 def handle_command(message):
@@ -10,8 +10,10 @@ def handle_command(message):
     bt_1 = types.InlineKeyboardButton(text = 'Расписание',callback_data = 'schedule')
     bt_2 = types.InlineKeyboardButton(text = 'Кафедры',callback_data = 'cafedrs')
     bt_3 = types.InlineKeyboardButton(text = 'Помощь',callback_data = 'help')
-    markup_inline.add(bt_1,bt_2,bt_3)
-    bot.send_message(message.chat.id, "Привет, что интересует?", reply_markup = markup_inline)
+    bt_4 = types.InlineKeyboardButton(text = 'Credits', callback_data = 'creators')
+    markup_inline.add(bt_1,bt_2,bt_3,bt_4)
+    bot.send_message(message.chat.id, 'Что тебе показать?', reply_markup = markup_inline)
+
 
 @bot.callback_query_handler(lambda a:True)
 def start_answer(a):
@@ -38,29 +40,48 @@ def start_answer(a):
         bot.send_message(a.message.chat.id, "Выбирай", reply_markup=markup_reply)
 
     elif a.data == 'cafedrs':
-        bot.send_message(a.message.chat.id, 'В нашем вузе имеются следующие кафедры:\n\n[Бухгалтерский учёт, аудит, статистика](http://www.fa.ru/fil/ufa/org/chair/buas/Pages/Home.aspx)\n\n[Математика и информатика](http://www.fa.ru/fil/ufa/org/chair/mi/Pages/Home.aspx)\n\n[Философия, история и право](http://www.fa.ru/fil/ufa/org/chair/fip/Pages/Home.aspx)\n\n[Финансы и кредит](http://www.fa.ru/fil/ufa/org/chair/fik/Pages/Home.aspx)\n\n[Экономика, менеджмент и маркетинг](http://www.fa.ru/fil/ufa/org/chair/emm/Pages/Home.aspx)', parse_mode='Markdown',disable_web_page_preview='true')
+        markup_reply2 = types.InlineKeyboardMarkup()
+        bt_1 = types.InlineKeyboardButton(text='Назад', callback_data='yes')
+        markup_reply2.add(bt_1)
+        bot.send_message(a.message.chat.id, 'В нашем вузе имеются следующие кафедры:\n\n[Бухгалтерский учёт, аудит, статистика](http://www.fa.ru/fil/ufa/org/chair/buas/Pages/Home.aspx)\n\n[Математика и информатика](http://www.fa.ru/fil/ufa/org/chair/mi/Pages/Home.aspx)\n\n[Философия, история и право](http://www.fa.ru/fil/ufa/org/chair/fip/Pages/Home.aspx)\n\n[Финансы и кредит](http://www.fa.ru/fil/ufa/org/chair/fik/Pages/Home.aspx)\n\n[Экономика, менеджмент и маркетинг](http://www.fa.ru/fil/ufa/org/chair/emm/Pages/Home.aspx)', parse_mode='Markdown', disable_web_page_preview= 'true', reply_markup=markup_reply2)
+    
     elif a.data == 'help':
-        bot.send_message(a.message.chat.id, "*Контакты Уфимского Филиала Финуниверситета:*\n\nТелефон: (347) 251-08-23\n\ne-mail: ufa@fa.ru\n\nАдрес: 450015, г. Уфа, ул. Мустая Карима 69/1", parse_mode='Markdown')
+        markup_reply3 = types.InlineKeyboardMarkup()
+        bt_2 = types.InlineKeyboardButton(text='Назад', callback_data='yes')
+        markup_reply3.add(bt_2)
+        bot.send_message(a.message.chat.id, "*Контакты Уфимского Филиала Финуниверситета:*\n\nТелефон: (347) 251-08-23\n\ne-mail: ufa@fa.ru\n\nАдрес: 450015, г. Уфа, ул. Мустая Карима 69/1", parse_mode='Markdown', reply_markup=markup_reply3)
+   
     elif a.data == 'back':
         return handle_command(a.message)
-
+       
     elif a.data in list(main.data):
-        bot.send_message(a.message.chat.id, main.data[a.data],disable_web_page_preview="false")
-        markup_reply2 = types.InlineKeyboardMarkup()
-        bt_1 = types.InlineKeyboardButton(text='Да', callback_data='yes')
-        bt_2 = types.InlineKeyboardButton(text='Нет', callback_data='no')
-        markup_reply2.add(bt_1,bt_2)
-        bot.send_message(a.message.chat.id,"Могу ли я вам еще чем-нибудь помочь?", reply_markup=markup_reply2)
+        bot.send_message(a.message.chat.id, main.data[a.data])
+        markup_reply4 = types.InlineKeyboardMarkup()
+        bt_3 = types.InlineKeyboardButton(text='Да', callback_data='yes')
+        bt_4 = types.InlineKeyboardButton(text='Нет', callback_data='no')
+        markup_reply4.add(bt_3,bt_4)
+        bot.send_message(a.message.chat.id,"Могу быть ещё чем-то полезен?", reply_markup=markup_reply4)
 
     elif a.data == 'yes':
         return handle_command(a.message)
     elif a.data == "no":
-        bot.send_message(a.message.chat.id, "Спасибо за кров мой повелитель")
+        markup_reply5 = types.InlineKeyboardMarkup()
+        bt_5 = types.InlineKeyboardButton(text='Тык', callback_data='yes')
+        markup_reply5.add(bt_5)
+        bot.send_message(a.message.chat.id, "Как только понадоблюсь - тыкни!", reply_markup=markup_reply5)
+    elif a.data =='creators':
+        markup_reply6 = types.InlineKeyboardMarkup()
+        bt_6 = types.InlineKeyboardButton(text='Назад', callback_data='yes')
+        markup_reply6.add(bt_6)
+        bot.send_message(a.message.chat.id, 'Код написали:\nЖуравлёв Алексей и Калимуллин Тимур\n\nНаучный руководитель:\nФархиева Светлана Анатольевна', reply_markup=markup_reply6)
+
 
 @bot.message_handler(content_types=['text'])
 def send_text(message):
     if message.text.lower() =='старт' or message.text.lower() =='привет' or message.text.lower() =="start":
         return handle_command(message)
-
-
+    if message.text.lower() =='гачимучи' or message.text.lower() =='гачи':
+        bot.send_sticker(message.chat.id, 'CAACAgIAAxkBAAECGMNgWszxYKh0CWKG4IWj5bO77ARJAgAC2wADZj9IJlhsnQls0emgHgQ')
+        bot.send_message(message.chat.id, '♂Oh, yes sir♂')
+    
 bot.polling()
