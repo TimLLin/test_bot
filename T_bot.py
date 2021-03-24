@@ -34,7 +34,7 @@ def start_answer(a):
         bt_12 = types.InlineKeyboardButton(text='130-БУ', callback_data='130-БУ')
         bt_13 = types.InlineKeyboardButton(text='140-БД', callback_data='140-БД')
         bt_14 = types.InlineKeyboardButton(text='140-БМ', callback_data='140-БМ')
-        bt_15 = types.InlineKeyboardButton(text='140-БУ', callback_data='120-БУ')
+        bt_15 = types.InlineKeyboardButton(text='140-БУ', callback_data='140-БУ')
         bt_16 = types.InlineKeyboardButton(text='140-ЭБ', callback_data='140-ЭБ')
         bt_17 = types.InlineKeyboardButton(text='Назад', callback_data='back')
         markup_reply.add(bt_1, bt_2, bt_3, bt_4, bt_5, bt_6, bt_7, bt_8, bt_9, bt_10, bt_11, bt_12, bt_13, bt_14, bt_15,
