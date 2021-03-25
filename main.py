@@ -1,6 +1,4 @@
-from subprocess import call
 import requests
-#call(["textutil", "-convert", "txt", "130_BD"])
 
 data = {
     '110-БД' : 'http://www.fa.ru/fil/ufa/student/Bak_och/110БД.rtf',
@@ -18,5 +16,13 @@ data = {
     '140-БД': 'http://www.fa.ru/fil/ufa/student/Bak_och/140БД.rtf',
     '140-БМ': 'http://www.fa.ru/fil/ufa/student/Bak_och/140БМ.rtf',
     '140-БУ': 'http://www.fa.ru/fil/ufa/student/Bak_och/140БУ.rtf',
-    '140-ЭБ': 'http://www.fa.ru/fil/ufa/student/Bak_och/140ЭБ.rtf'
+    '140-ЭБ.docx': 'http://www.fa.ru/fil/ufa/student/Bak_och/График%20пересдач.docx'
 }
+
+
+def download_data(name,url):
+    r = requests.get(url, allow_redirects=True)
+    open(name, "wb").write(r.content)
+
+
+download_data('130БД.doc','http://www.fa.ru/fil/ufa/student/Bak_och/130БД.doc')

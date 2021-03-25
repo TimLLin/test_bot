@@ -2,7 +2,7 @@ import telebot
 import main
 from telebot import types
 
-bot = telebot.TeleBot('1782052770:AAEuTYmwFszzA97utccxH4ZXoKfXeXf3TXI')
+bot = telebot.TeleBot('1739168654:AAGNZoEpFfxUgJtSby3FnRupcOLikkk1Hv8')
 
 
 @bot.message_handler(commands=['start'])
@@ -35,10 +35,11 @@ def start_answer(a):
         bt_13 = types.InlineKeyboardButton(text='140-БД', callback_data='140-БД')
         bt_14 = types.InlineKeyboardButton(text='140-БМ', callback_data='140-БМ')
         bt_15 = types.InlineKeyboardButton(text='140-БУ', callback_data='140-БУ')
-        bt_16 = types.InlineKeyboardButton(text='140-ЭБ', callback_data='140-ЭБ')
+        bt_16 = types.InlineKeyboardButton(text='140-ЭБ', callback_data='140-ЭБ.docx')
         bt_17 = types.InlineKeyboardButton(text='Назад', callback_data='back')
+        bt_18 = types.InlineKeyboardButton(text='Test', callback_data='test')
         markup_reply.add(bt_1, bt_2, bt_3, bt_4, bt_5, bt_6, bt_7, bt_8, bt_9, bt_10, bt_11, bt_12, bt_13, bt_14, bt_15,
-                         bt_16, bt_17)
+                         bt_16, bt_17,bt_18)
         bot.send_message(a.message.chat.id, "Выбирай", reply_markup=markup_reply)
 
     elif a.data == 'cafedrs':
@@ -61,7 +62,7 @@ def start_answer(a):
         return handle_command(a.message)
 
     elif a.data in list(main.data):
-        bot.send_message(a.message.chat.id, main.data[a.data])
+        bot.send_message(a.message.chat.id,main.data[a.data])
         markup_reply4 = types.InlineKeyboardMarkup()
         bt_3 = types.InlineKeyboardButton(text='Да', callback_data='yes')
         bt_4 = types.InlineKeyboardButton(text='Нет', callback_data='no')
@@ -83,6 +84,9 @@ def start_answer(a):
                          'Код написали:\nЖуравлёв Алексей и Калимуллин Тимур\n\nНаучный руководитель:\nФархиева Светлана Анатольевна',
                          reply_markup=markup_reply6)
 
+    elif a.data == 'test':
+       f=open('140-ЭБ.docx','rb')
+       bot.send_document(a.message.chat.id,f)
 
 @bot.message_handler(content_types=['text'])
 def send_text(message):
