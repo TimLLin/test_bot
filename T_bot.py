@@ -79,8 +79,18 @@ def start_answer(a):
     elif a.data == 'test':
         test = main.w_schedule('120-БУ.docx')
         for elem in test:
-            mes = "\t".join(elem)
-            bot.send_message(a.message.chat.id, mes)
+            date = elem[1] + '\t' + elem[0]
+            for i in range(len(elem)):
+                if len(elem[i])==3:
+                    elem.insert(i+1,'\n\n')
+            sub = '\t'.join(elem)
+
+
+
+
+
+
+            bot.send_message(a.message.chat.id, sub)
 
 
 @bot.message_handler(content_types=['text'])
