@@ -61,7 +61,22 @@ def start_answer(a):
 
     elif a.data in list(main.data):
         schedule = main.download_data(a.data,main.data[a.data])
-        bot.send_document(a.message.chat.id,schedule)
+        try:
+            week_schedule = main.w_schedule(a.data)
+            for elem in week_schedule:
+                del1 = elem[0]
+                del2 = elem[1]
+                date = elem[1] + '\t' + elem[0] + '\n'
+                for i in range(len(elem)):
+                    if len(elem[i])==3:
+                        elem.insert(i+1,'\n\n')
+                    if elem[i]==del1 or elem[i]==del2:
+                        elem[i] = str()
+                sub = ' '.join(elem)
+                mes = date + '\t\n\t' + sub
+                bot.send_message(a.message.chat.id, mes)
+        except ValueError:
+            bot.send_document(a.message.chat.id,schedule)
         markup_reply4 = types.InlineKeyboardMarkup()
         bt_3 = types.InlineKeyboardButton(text='Да', callback_data='yes')
         bt_4 = types.InlineKeyboardButton(text='Нет', callback_data='no')
@@ -89,12 +104,6 @@ def start_answer(a):
                     elem[i] = str()
             sub = ' '.join(elem)
             mes = date + '\t\n\t' + sub
-
-
-
-
-
-
             bot.send_message(a.message.chat.id, mes)
 
 
