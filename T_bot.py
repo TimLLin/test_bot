@@ -79,18 +79,23 @@ def start_answer(a):
     elif a.data == 'test':
         test = main.w_schedule('120-БУ.docx')
         for elem in test:
-            date = elem[1] + '\t' + elem[0]
+            del1 = elem[0]
+            del2 = elem[1]
+            date = elem[1] + '\t' + elem[0] + '\n'
             for i in range(len(elem)):
                 if len(elem[i])==3:
                     elem.insert(i+1,'\n\n')
-            sub = '\t'.join(elem)
+                if elem[i]==del1 or elem[i]==del2:
+                    elem[i] = str()
+            sub = ' '.join(elem)
+            mes = date + '\t\n\t' + sub
 
 
 
 
 
 
-            bot.send_message(a.message.chat.id, sub)
+            bot.send_message(a.message.chat.id, mes)
 
 
 @bot.message_handler(content_types=['text'])
