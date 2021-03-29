@@ -2,7 +2,7 @@ import telebot
 import main
 from telebot import types
 
-bot = telebot.TeleBot('**')
+bot = telebot.TeleBot('1739168654:AAEpDabUmUWuAJds56JrXAbKRUSNd88izOU')
 
 
 @bot.message_handler(commands=['start'])
@@ -76,6 +76,11 @@ def start_answer(a):
         markup_reply5.add(bt_5)
         bot.send_message(a.message.chat.id, "Как только понадоблюсь - тыкни!", reply_markup=markup_reply5)
 
+    elif a.data == 'test':
+        test = main.w_schedule('120-БУ.docx')
+        for elem in test:
+            mes = "\t".join(elem)
+            bot.send_message(a.message.chat.id, mes)
 
 
 @bot.message_handler(content_types=['text'])
