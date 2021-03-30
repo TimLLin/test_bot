@@ -2,7 +2,7 @@ import telebot
 import main
 from telebot import types
 
-bot = telebot.TeleBot('1739168654:AAEpDabUmUWuAJds56JrXAbKRUSNd88izOU')
+bot = telebot.TeleBot('1782052770:AAEuTYmwFszzA97utccxH4ZXoKfXeXf3TXI')
 
 
 @bot.message_handler(commands=['start'])
@@ -37,7 +37,7 @@ def start_answer(a):
         bt_16 = types.InlineKeyboardButton(text='140-ЭБ', callback_data='140-ЭБ.docx')
         bt_17 = types.InlineKeyboardButton(text='Назад', callback_data='back')
         bt_18 = types.InlineKeyboardButton(text='тест', callback_data='test')
-        markup_reply.add(bt_1, bt_2, bt_3, bt_4, bt_5, bt_6, bt_7, bt_8, bt_9, bt_10, bt_11, bt_12, bt_17, bt_18)
+        markup_reply.add(bt_1, bt_2, bt_3, bt_4, bt_5, bt_6, bt_7, bt_8, bt_9, bt_10, bt_11, bt_12, bt_17)
         bot.send_message(a.message.chat.id, "Выбирай", reply_markup=markup_reply)
 
     elif a.data == 'cafedrs':
@@ -68,7 +68,7 @@ def start_answer(a):
                 del2 = elem[1]
                 date = elem[1] + '\t' + elem[0] + '\n'
                 for i in range(len(elem)):
-                    if len(elem[i])==3:
+                    if (len(elem[i])==3 and elem[i]!="РБС") or (elem[i]=='спорт' and elem[i-1]!="и"):
                         elem.insert(i+1,'\n\n')
                     if elem[i]==del1 or elem[i]==del2:
                         elem[i] = str()
@@ -92,19 +92,7 @@ def start_answer(a):
         bot.send_message(a.message.chat.id, "Как только понадоблюсь - тыкни!", reply_markup=markup_reply5)
 
     elif a.data == 'test':
-        test = main.w_schedule('120-БУ.docx')
-        for elem in test:
-            del1 = elem[0]
-            del2 = elem[1]
-            date = elem[1] + '\t' + elem[0] + '\n'
-            for i in range(len(elem)):
-                if len(elem[i])==3:
-                    elem.insert(i+1,'\n\n')
-                if elem[i]==del1 or elem[i]==del2:
-                    elem[i] = str()
-            sub = ' '.join(elem)
-            mes = date + '\t\n\t' + sub
-            bot.send_message(a.message.chat.id, mes)
+        pass
 
 
 @bot.message_handler(content_types=['text'])

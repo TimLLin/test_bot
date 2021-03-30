@@ -1,5 +1,4 @@
 import requests
-import re
 from docx import Document
 data = {
     '110-БД.docx' : 'http://www.fa.ru/fil/ufa/student/Bak_och/110БД.docx',
@@ -29,6 +28,7 @@ def download_data(name,url):
 
 def w_schedule(text):
     sch = [[],[],[],[],[]]
+    date = ['ПН','ВТ','СР','ЧТ','ПТ']
     document = Document(text)
     fulltext = []
     for para in document.paragraphs:
@@ -41,4 +41,4 @@ def w_schedule(text):
     sch[4] = new_list[new_list[:].index("ПТ")-1:]
     return sch
 #download_data('130-БД.docx','http://www.fa.ru/fil/ufa/student/Bak_och/130БД.docx')
-print(w_schedule('120-БУ.docx'))
+#print(w_schedule('120-БУ.docx'))
