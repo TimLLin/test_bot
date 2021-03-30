@@ -2,7 +2,7 @@ import telebot
 import main
 from telebot import types
 
-bot = telebot.TeleBot('1782052770:AAEuTYmwFszzA97utccxH4ZXoKfXeXf3TXI')
+bot = telebot.TeleBot('1739168654:AAEpDabUmUWuAJds56JrXAbKRUSNd88izOU')
 
 
 @bot.message_handler(commands=['start'])
@@ -11,8 +11,7 @@ def handle_command(message):
     bt_1 = types.InlineKeyboardButton(text='Расписание', callback_data='schedule')
     bt_2 = types.InlineKeyboardButton(text='Кафедры', callback_data='cafedrs')
     bt_3 = types.InlineKeyboardButton(text='Помощь', callback_data='help')
-    bt_4 = types.InlineKeyboardButton(text='Новости', callback_data='news')
-    markup_inline.add(bt_1, bt_2, bt_3, bt_4)
+    markup_inline.add(bt_1, bt_2, bt_3)
     bot.send_message(message.chat.id, 'Что тебе показать?', reply_markup=markup_inline)
 
 
@@ -37,6 +36,7 @@ def start_answer(a):
         bt_15 = types.InlineKeyboardButton(text='140-БУ', callback_data='140-БУ.docx')
         bt_16 = types.InlineKeyboardButton(text='140-ЭБ', callback_data='140-ЭБ.docx')
         bt_17 = types.InlineKeyboardButton(text='Назад', callback_data='back')
+        bt_18 = types.InlineKeyboardButton(text='тест', callback_data='test')
         markup_reply.add(bt_1, bt_2, bt_3, bt_4, bt_5, bt_6, bt_7, bt_8, bt_9, bt_10, bt_11, bt_12, bt_17)
         bot.send_message(a.message.chat.id, "Выбирай", reply_markup=markup_reply)
 
@@ -58,31 +58,41 @@ def start_answer(a):
 
     elif a.data == 'back':
         return handle_command(a.message)
-    
-    elif a.data== 'news': 
-        markup_reply4 = types.InlineKeyboardMarkup()
-        bt_3 = types.InlineKeyboardButton(text='Назад', callback_data='yes')
-        markup_reply4.add(bt_3)
-        bot.send_message(a.message.chat.id, '[Новости Уфимского филиала](http://www.fa.ru/fil/ufa/News/Forms/AllPages.aspx)\n\n[Новости главного вуза](http://www.fa.ru/News/Forms/AllPages.aspx)', parse_mode='Markdown', disable_web_page_preview='true', reply_markup=markup_reply4)
-
 
     elif a.data in list(main.data):
         schedule = main.download_data(a.data,main.data[a.data])
-        bot.send_document(a.message.chat.id,schedule)
-        markup_reply5 = types.InlineKeyboardMarkup()
-        bt_4 = types.InlineKeyboardButton(text='Да', callback_data='yes')
-        bt_5 = types.InlineKeyboardButton(text='Нет', callback_data='no')
-        markup_reply5.add(bt_4, bt_5)
-        bot.send_message(a.message.chat.id, "Могу быть ещё чем-то полезен?", reply_markup=markup_reply5)
+        try:
+            week_schedule = main.w_schedule(a.data)
+            for elem in week_schedule:
+                del1 = elem[0]
+                del2 = elem[1]
+                date = elem[1] + '\t' + elem[0] + '\n'
+                for i in range(len(elem)):
+                    if (len(elem[i])==3 and elem[i]!="РБС") or (elem[i]=='спорт' and elem[i-1]!="и"):
+                        elem.insert(i+1,'\n\n')
+                    if elem[i]==del1 or elem[i]==del2:
+                        elem[i] = str()
+                sub = ' '.join(elem)
+                mes = date + '\t\n\t' + sub
+                bot.send_message(a.message.chat.id, mes)
+        except ValueError:
+            bot.send_document(a.message.chat.id,schedule)
+        markup_reply4 = types.InlineKeyboardMarkup()
+        bt_3 = types.InlineKeyboardButton(text='Да', callback_data='yes')
+        bt_4 = types.InlineKeyboardButton(text='Нет', callback_data='no')
+        markup_reply4.add(bt_3, bt_4)
+        bot.send_message(a.message.chat.id, "Могу быть ещё чем-то полезен?", reply_markup=markup_reply4)
 
     elif a.data == 'yes':
         return handle_command(a.message)
     elif a.data == "no":
-        markup_reply6 = types.InlineKeyboardMarkup()
-        bt_6 = types.InlineKeyboardButton(text='Тык', callback_data='yes')
-        markup_reply6.add(bt_6)
-        bot.send_message(a.message.chat.id, "Как только понадоблюсь - тыкни!", reply_markup=markup_reply6)
+        markup_reply5 = types.InlineKeyboardMarkup()
+        bt_5 = types.InlineKeyboardButton(text='Тык', callback_data='yes')
+        markup_reply5.add(bt_5)
+        bot.send_message(a.message.chat.id, "Как только понадоблюсь - тыкни!", reply_markup=markup_reply5)
 
+    elif a.data == 'test':
+        pass
 
 
 @bot.message_handler(content_types=['text'])

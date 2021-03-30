@@ -1,5 +1,5 @@
 import requests
-
+from docx import Document
 data = {
     '110-БД.docx' : 'http://www.fa.ru/fil/ufa/student/Bak_och/110БД.docx',
     '110-БМ-1.docx' : 'http://www.fa.ru/fil/ufa/student/Bak_och/110БМ-1.docx',
@@ -26,6 +26,19 @@ def download_data(name,url):
     file = open(name, 'rb')
     return file
 
-
-
-download_data('130-БД.docx','http://www.fa.ru/fil/ufa/student/Bak_och/130БД.docx')
+def w_schedule(text):
+    sch = [[],[],[],[],[]]
+    date = ['ПН','ВТ','СР','ЧТ','ПТ']
+    document = Document(text)
+    fulltext = []
+    for para in document.paragraphs:
+        fulltext.append(para.text)
+    new_list = [word for line in fulltext for word in line.split()]
+    sch[0] = new_list[new_list[:].index("ПН")-1:new_list[:].index("ВТ")-1]
+    sch[1] = new_list[new_list[:].index("ВТ")-1:new_list[:].index("СР")-1]
+    sch[2] = new_list[new_list[:].index("СР")-1:new_list[:].index("ЧТ")-1]
+    sch[3] = new_list[new_list[:].index("ЧТ")-1:new_list[:].index("ПТ")-1]
+    sch[4] = new_list[new_list[:].index("ПТ")-1:]
+    return sch
+#download_data('130-БД.docx','http://www.fa.ru/fil/ufa/student/Bak_och/130БД.docx')
+#print(w_schedule('120-БУ.docx'))
