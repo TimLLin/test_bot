@@ -2,7 +2,7 @@ import telebot
 import main
 from telebot import types
 
-bot = telebot.TeleBot('1782052770:AAEuTYmwFszzA97utccxH4ZXoKfXeXf3TXI')
+bot = telebot.TeleBot('1739168654:AAEpDabUmUWuAJds56JrXAbKRUSNd88izOU')
 
 
 @bot.message_handler(commands=['start'])
@@ -11,7 +11,8 @@ def handle_command(message):
     bt_1 = types.InlineKeyboardButton(text='Расписание', callback_data='schedule')
     bt_2 = types.InlineKeyboardButton(text='Кафедры', callback_data='cafedrs')
     bt_3 = types.InlineKeyboardButton(text='Помощь', callback_data='help')
-    markup_inline.add(bt_1, bt_2, bt_3)
+    bt_4 = types.InlineKeyboardButton(text='Новости', callback_data='news')
+    markup_inline.add(bt_1, bt_2, bt_3,bt_4)
     bot.send_message(message.chat.id, 'Что тебе показать?', reply_markup=markup_inline)
 
 
@@ -91,8 +92,16 @@ def start_answer(a):
         markup_reply5.add(bt_5)
         bot.send_message(a.message.chat.id, "Как только понадоблюсь - тыкни!", reply_markup=markup_reply5)
 
-    elif a.data == 'test':
-        pass
+    elif a.data == 'news':
+        test = main.news()
+        sus = "\t".join(test)
+        bot.send_message(a.message.chat.id, "[Новости Филиала](http://www.fa.ru/fil/ufa/News/Forms/AllPages.aspx)",
+                         parse_mode='Markdown', disable_web_page_preview='true')
+        markup_reply6 = types.InlineKeyboardMarkup()
+        bt_6 = types.InlineKeyboardButton(text='Назад', callback_data='yes')
+        markup_reply6.add(bt_6)
+        bot.send_message(a.message.chat.id, sus, disable_web_page_preview='true', reply_markup=markup_reply6)
+
 
 
 @bot.message_handler(content_types=['text'])

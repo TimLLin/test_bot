@@ -1,5 +1,6 @@
 import requests
 from docx import Document
+from bs4 import BeautifulSoup
 data = {
     '110-БД.docx' : 'http://www.fa.ru/fil/ufa/student/Bak_och/110БД.docx',
     '110-БМ-1.docx' : 'http://www.fa.ru/fil/ufa/student/Bak_och/110БМ-1.docx',
@@ -40,5 +41,17 @@ def w_schedule(text):
     sch[3] = new_list[new_list[:].index("ЧТ")-1:new_list[:].index("ПТ")-1]
     sch[4] = new_list[new_list[:].index("ПТ")-1:]
     return sch
-#download_data('130-БД.docx','http://www.fa.ru/fil/ufa/student/Bak_och/130БД.docx')
-#print(w_schedule('120-БУ.docx'))
+
+def news():
+    n=[]
+    response = requests.get("http://www.fa.ru/fil/ufa/News/Forms/AllPages.aspx#InplviewHashb8d04cfc-441e-4048-ac3b-413a847304ad=FilterField1%3DCategory-FilterValue1%3D%25D0%259D%25D0%25BE%25D0%25B2%25D0%25BE%25D1%2581%25D1%2582%25D0%25B8%2520%25D0%25A3%25D0%25BD%25D0%25B8%25D0%25B2%25D0%25B5%25D1%2580%25D1%2581%25D0%25B8%25D1%2582%25D0%25B5%25D1%2582%25D0%25B0")
+    soup = BeautifulSoup(response.content, 'html.parser')
+    div_title = soup.find_all('td', class_="ms-vb2")
+    for element in div_title:
+        if soup.find_all('div', class_='ms-rtestate-field'):
+            n.append(element.text)
+    n.remove('Новости Университета')
+    for elem in range(len(n)):
+        if n[elem]=="":
+            n[elem]="\n"
+    return n
