@@ -12,7 +12,9 @@ def handle_command(message):
     bt_2 = types.InlineKeyboardButton(text='Кафедры', callback_data='cafedrs')
     bt_3 = types.InlineKeyboardButton(text='Помощь', callback_data='help')
     bt_4 = types.InlineKeyboardButton(text='Новости', callback_data='news')
-    markup_inline.add(bt_1, bt_2, bt_3,bt_4)
+    bt_5 = types.InlineKeyboardButton(text='Курсы валют ЦБ', callback_data='currency')
+    bt_6 = types.InlineKeyboardButton(text='Ключевая ставка', callback_data='stake')
+    markup_inline.add(bt_1, bt_2, bt_3,bt_4,bt_5, bt_6)
     bot.send_message(message.chat.id, 'Что тебе показать?', reply_markup=markup_inline)
 
 
@@ -101,6 +103,18 @@ def start_answer(a):
         bt_6 = types.InlineKeyboardButton(text='Назад', callback_data='yes')
         markup_reply6.add(bt_6)
         bot.send_message(a.message.chat.id, sus, disable_web_page_preview='true', reply_markup=markup_reply6)
+    
+    elif a.data =='currency':
+        test = main.currency()
+        sus ="\t". join(test)
+        bot.send_message(a.message.chat.id, sus, disable_web_page_preview='true')
+    
+    elif a.data =='stake':
+        test = main.stake()
+        sus = "\t". join(test)
+        bot.send_message(a.message.chat.id, sus, disable_web_page_preview='true')
+
+
 
 
 

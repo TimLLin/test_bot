@@ -55,3 +55,23 @@ def news():
         if n[elem]=="":
             n[elem]="\n"
     return n
+
+def currency():
+    cb=[]
+    response = requests.get("https://cbr.ru/")
+    soup = BeautifulSoup(response.content, 'html.parser')
+    rate = soup.find_all('div', class_='main-indicator_rates-table')
+    for data in rate:
+        if soup.find_all('div', class_='main-indicator_rates-table'):
+            cb.append(data.text)
+    return cb
+
+def stake():
+    st=[]
+    response = requests.get("https://cbr.ru/hd_base/KeyRate/")
+    soup = BeautifulSoup(response.content, 'html.parser')
+    rate = soup.find_all('div', class_='table-wrapper')
+    for element in rate:
+        if soup.find_all('div', class_='table-wrapper'):
+            st.append(element.text)
+    return st
