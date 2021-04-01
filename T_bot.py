@@ -84,7 +84,7 @@ def start_answer(a):
         bt_3 = types.InlineKeyboardButton(text='Да', callback_data='yes')
         bt_4 = types.InlineKeyboardButton(text='Нет', callback_data='no')
         markup_reply5.add(bt_3, bt_4)
-        bot.send_message(a.message.chat.id, "Могу быть ещё чем-то полезен?", reply_markup5=markup_reply)
+        bot.send_message(a.message.chat.id, "Могу быть ещё чем-то полезен?", reply_markup=markup_reply5)
 
     elif a.data == "today":
         schedule = main.download_data(main.var, main.data[main.var])
