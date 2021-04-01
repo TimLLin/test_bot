@@ -1,6 +1,9 @@
 import requests
 from docx import Document
 from bs4 import BeautifulSoup
+
+token_test = '1739168654:AAEpDabUmUWuAJds56JrXAbKRUSNd88izOU'
+token_finufa = '1782052770:AAEuTYmwFszzA97utccxH4ZXoKfXeXf3TXI'
 data = {
     '110-БД.docx' : 'http://www.fa.ru/fil/ufa/student/Bak_och/110БД.docx',
     '110-БМ-1.docx' : 'http://www.fa.ru/fil/ufa/student/Bak_och/110БМ-1.docx',
@@ -50,11 +53,27 @@ def news():
     for element in div_title:
         if soup.find_all('div', class_='ms-rtestate-field'):
             n.append(element.text)
-    n.remove('Новости Университета')
     for elem in range(len(n)):
         if n[elem]=="":
             n[elem]="\n"
+        if n[elem] == 'Новости Университета':
+            n[elem]=""
     return n
+
+var = None
+
+def list_edit(elem):
+    del1 = elem[0]
+    del2 = elem[1]
+    date = elem[1] + '\t' + elem[0] + '\n'
+    for i in range(len(elem)):
+        if (len(elem[i]) == 3 and elem[i] != "РБС") or (elem[i] == 'спорт' and elem[i - 1] != "и"):
+            elem.insert(i + 1, '\n\n')
+        if elem[i] == del1 or elem[i] == del2:
+            elem[i] = str()
+    sub = ' '.join(elem)
+    mes = date + '\t\n\t' + sub
+    return mes
 
 def currency():
     cb=[]
@@ -68,10 +87,33 @@ def currency():
 
 def stake():
     st=[]
-    response = requests.get("https://cbr.ru/hd_base/KeyRate/")
+    response = requests.get("https://www.cbr.ru")
     soup = BeautifulSoup(response.content, 'html.parser')
-    rate = soup.find_all('div', class_='table-wrapper')
+    rate = soup.find_all('div', class_='main-indicator')
     for element in rate:
-        if soup.find_all('div', class_='table-wrapper'):
+        if soup.find_all('div', class_='main-indicator'):
             st.append(element.text)
-    return st
+    new_list = [word for line in st for word in line.split()]
+    new_list.insert(0,'Ключевые показатели: \n')
+    for ind in range(len(new_list)):
+        if ind in [4,9]:
+            new_list.insert(ind+1,'\n')
+    return '\t'.join(new_list)
+
+def currency():
+    cb=[]
+    response = requests.get("https://cbr.ru/")
+    soup = BeautifulSoup(response.content, 'html.parser')
+    rate = soup.find_all('div', class_='main-indicator_rates-table')
+    for data in rate:
+        if soup.find_all('div', class_='main-indicator_rates-table'):
+            cb.append(data.text)
+    new_list = [word for line in cb for word in line.split()]
+    for ind in range(len(new_list)):
+        if ind in [2, 5, 11, 16, 22]:
+            new_list.insert(ind,'\n')
+    return '\t'.join(new_list)
+
+
+
+

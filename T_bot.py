@@ -1,8 +1,9 @@
 import telebot
 import main
 from telebot import types
+from datetime import datetime
 
-bot = telebot.TeleBot('1782052770:AAEuTYmwFszzA97utccxH4ZXoKfXeXf3TXI')
+bot = telebot.TeleBot(main.token_test)
 
 
 @bot.message_handler(commands=['start'])
@@ -12,9 +13,8 @@ def handle_command(message):
     bt_2 = types.InlineKeyboardButton(text='Кафедры', callback_data='cafedrs')
     bt_3 = types.InlineKeyboardButton(text='Помощь', callback_data='help')
     bt_4 = types.InlineKeyboardButton(text='Новости', callback_data='news')
-    bt_5 = types.InlineKeyboardButton(text='Курсы валют ЦБ', callback_data='currency')
-    bt_6 = types.InlineKeyboardButton(text='Ключевая ставка', callback_data='stake')
-    markup_inline.add(bt_1, bt_2, bt_3,bt_4,bt_5, bt_6)
+    bt_5 = types.InlineKeyboardButton(text='Данные ЦБ', callback_data='cb')
+    markup_inline.add(bt_1, bt_2, bt_3,bt_4,bt_5)
     bot.send_message(message.chat.id, 'Что тебе показать?', reply_markup=markup_inline)
 
 
@@ -38,9 +38,9 @@ def start_answer(a):
         bt_14 = types.InlineKeyboardButton(text='140-БМ', callback_data='140-БМ.docx')
         bt_15 = types.InlineKeyboardButton(text='140-БУ', callback_data='140-БУ.docx')
         bt_16 = types.InlineKeyboardButton(text='140-ЭБ', callback_data='140-ЭБ.docx')
-        bt_17 = types.InlineKeyboardButton(text='Назад', callback_data='back')
+        bt_17 = types.InlineKeyboardButton(text='Назад', callback_data='yes')
         bt_18 = types.InlineKeyboardButton(text='тест', callback_data='test')
-        markup_reply.add(bt_1, bt_2, bt_3, bt_4, bt_5, bt_6, bt_7, bt_8, bt_9, bt_10, bt_11, bt_12, bt_17)
+        markup_reply.add(bt_1, bt_2, bt_3, bt_4, bt_5, bt_6, bt_7, bt_8, bt_9, bt_10, bt_11, bt_12, bt_17,bt_18)
         bot.send_message(a.message.chat.id, "Выбирай", reply_markup=markup_reply)
 
     elif a.data == 'cafedrs':
@@ -59,68 +59,111 @@ def start_answer(a):
                          "*Контакты Уфимского Филиала Финуниверситета:*\n\nТелефон: (347) 251-08-23\n\ne-mail: ufa@fa.ru\n\nАдрес: 450015, г. Уфа, ул. Мустая Карима 69/1",
                          parse_mode='Markdown', reply_markup=markup_reply3)
 
-    elif a.data == 'back':
-        return handle_command(a.message)
 
     elif a.data in list(main.data):
-        schedule = main.download_data(a.data,main.data[a.data])
+        main.var = a.data
+        markup_reply4 = types.InlineKeyboardMarkup()
+        bt_1 = types.InlineKeyboardButton(text='На неделю', callback_data='week')
+        bt_2 = types.InlineKeyboardButton(text='На сегодня', callback_data='today')
+        bt_3 = types.InlineKeyboardButton(text='На завтра', callback_data='tommorow')
+        markup_reply4.add(bt_1,bt_2,bt_3)
+        bot.send_message(a.message.chat.id, "Выбирай", reply_markup=markup_reply4)
+
+
+    elif a.data == "week":
+        schedule = main.download_data(main.var,main.data[main.var])
         try:
-            week_schedule = main.w_schedule(a.data)
+            week_schedule = main.w_schedule(main.var)
             for elem in week_schedule:
-                del1 = elem[0]
-                del2 = elem[1]
-                date = elem[1] + '\t' + elem[0] + '\n'
-                for i in range(len(elem)):
-                    if (len(elem[i])==3 and elem[i]!="РБС") or (elem[i]=='спорт' and elem[i-1]!="и"):
-                        elem.insert(i+1,'\n\n')
-                    if elem[i]==del1 or elem[i]==del2:
-                        elem[i] = str()
-                sub = ' '.join(elem)
-                mes = date + '\t\n\t' + sub
+                mes = main.list_edit(elem)
                 bot.send_message(a.message.chat.id, mes)
         except ValueError:
             bot.send_document(a.message.chat.id,schedule)
-        markup_reply4 = types.InlineKeyboardMarkup()
+
+        markup_reply5 = types.InlineKeyboardMarkup()
         bt_3 = types.InlineKeyboardButton(text='Да', callback_data='yes')
         bt_4 = types.InlineKeyboardButton(text='Нет', callback_data='no')
-        markup_reply4.add(bt_3, bt_4)
-        bot.send_message(a.message.chat.id, "Могу быть ещё чем-то полезен?", reply_markup=markup_reply4)
+        markup_reply5.add(bt_3, bt_4)
+        bot.send_message(a.message.chat.id, "Могу быть ещё чем-то полезен?", reply_markup=markup_reply5)
+
+    elif a.data == "today":
+        schedule = main.download_data(main.var, main.data[main.var])
+        try:
+            week_schedule = main.w_schedule(main.var)
+            weekday = datetime.weekday(datetime.now())
+            if weekday in [5,6]:
+                bot.send_message(a.message.chat.id, "Бип боп расписание обновляется")
+            else:
+                mes = main.list_edit(week_schedule[weekday])
+                bot.send_message(a.message.chat.id, mes)
+        except ValueError:
+            bot.send_document(a.message.chat.id,schedule)
+        markup_reply5 = types.InlineKeyboardMarkup()
+        bt_3 = types.InlineKeyboardButton(text='Да', callback_data='yes')
+        bt_4 = types.InlineKeyboardButton(text='Нет', callback_data='no')
+        markup_reply5.add(bt_3, bt_4)
+        bot.send_message(a.message.chat.id, "Могу быть ещё чем-то полезен?", reply_markup=markup_reply5)
+
+    elif a.data == "tommorow":
+        schedule = main.download_data(main.var, main.data[main.var])
+        try:
+            week_schedule = main.w_schedule(main.var)
+            weekday = datetime.weekday(datetime.now())+1
+            if weekday in [5,6]:
+                bot.send_message(a.message.chat.id, "Бип боп расписание обновляется")
+            elif weekday ==7:
+                weekday = 0
+                mes = main.list_edit(week_schedule[weekday])
+                bot.send_message(a.message.chat.id, mes)
+            else:
+                mes = main.list_edit(week_schedule[weekday])
+                bot.send_message(a.message.chat.id, mes)
+        except ValueError:
+            bot.send_document(a.message.chat.id, schedule)
+        markup_reply5 = types.InlineKeyboardMarkup()
+        bt_3 = types.InlineKeyboardButton(text='Да', callback_data='yes')
+        bt_4 = types.InlineKeyboardButton(text='Нет', callback_data='no')
+        markup_reply5.add(bt_3, bt_4)
+        bot.send_message(a.message.chat.id, "Могу быть ещё чем-то полезен?", reply_markup=markup_reply5)
 
     elif a.data == 'yes':
         return handle_command(a.message)
     elif a.data == "no":
-        markup_reply5 = types.InlineKeyboardMarkup()
+        markup_reply6 = types.InlineKeyboardMarkup()
         bt_5 = types.InlineKeyboardButton(text='Тык', callback_data='yes')
-        markup_reply5.add(bt_5)
-        bot.send_message(a.message.chat.id, "Как только понадоблюсь - тыкни!", reply_markup=markup_reply5)
+        markup_reply6.add(bt_5)
+        bot.send_message(a.message.chat.id, "Как только понадоблюсь - тыкни!", reply_markup=markup_reply6)
 
     elif a.data == 'news':
         test = main.news()
         sus = "\t".join(test)
         bot.send_message(a.message.chat.id, "[Новости Филиала](http://www.fa.ru/fil/ufa/News/Forms/AllPages.aspx)",
                          parse_mode='Markdown', disable_web_page_preview='true')
-        markup_reply6 = types.InlineKeyboardMarkup()
+        markup_reply7 = types.InlineKeyboardMarkup()
         bt_6 = types.InlineKeyboardButton(text='Назад', callback_data='yes')
-        markup_reply6.add(bt_6)
-        bot.send_message(a.message.chat.id, sus, disable_web_page_preview='true', reply_markup=markup_reply6)
-    
-    elif a.data =='currency':
-        test = main.currency()
-        sus ="\t". join(test)
-        bot.send_message(a.message.chat.id, sus, disable_web_page_preview='true')
-    
-    elif a.data =='stake':
-        test = main.stake()
-        sus = "\t". join(test)
-        bot.send_message(a.message.chat.id, sus, disable_web_page_preview='true')
+        markup_reply7.add(bt_6)
+        bot.send_message(a.message.chat.id, sus, disable_web_page_preview='true', reply_markup=markup_reply7)
+
+    elif a.data == 'cb':
+        markup_reply8 = types.InlineKeyboardMarkup()
+        bt_1 = types.InlineKeyboardButton(text='Курсы валют', callback_data='currency')
+        bt_2 = types.InlineKeyboardButton(text='Ключевые показатели', callback_data='stake')
+        bt_3 = types.InlineKeyboardButton(text='Назад', callback_data='yes')
+        markup_reply8.add(bt_1, bt_2)
+        markup_reply8.add(bt_3)
+        bot.send_message(a.message.chat.id, "Выбирай", reply_markup=markup_reply8)
 
 
+    elif a.data == 'stake':
+        bot.send_message(a.message.chat.id, main.stake())
 
-
+    elif a.data == 'currency':
+        bot.send_message(a.message.chat.id,main.currency())
 
 @bot.message_handler(content_types=['text'])
 def send_text(message):
     if message.text.lower() == 'старт' or message.text.lower() == 'привет' or message.text.lower() == "start":
         return handle_command(message)
+
 
 bot.polling()
