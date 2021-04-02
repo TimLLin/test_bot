@@ -40,7 +40,7 @@ def start_answer(a):
         bt_16 = types.InlineKeyboardButton(text='140-ЭБ', callback_data='140-ЭБ.docx')
         bt_17 = types.InlineKeyboardButton(text='Назад', callback_data='yes')
         bt_18 = types.InlineKeyboardButton(text='тест', callback_data='test')
-        markup_reply.add(bt_1, bt_2, bt_3, bt_4, bt_5, bt_6, bt_7, bt_8, bt_9, bt_10, bt_11, bt_12, bt_17,bt_18)
+        markup_reply.add(bt_1, bt_2, bt_3, bt_4, bt_5, bt_6, bt_7, bt_8, bt_9, bt_10, bt_11, bt_12, bt_17)
         bot.send_message(a.message.chat.id, "Выбирай", reply_markup=markup_reply)
 
     elif a.data == 'cafedrs':
@@ -166,7 +166,7 @@ def start_answer(a):
         markup_reply10 = types.InlineKeyboardMarkup()
         bt_1 = types.InlineKeyboardButton(text='Да', callback_data='yes')
         bt_2 = types.InlineKeyboardButton(text='Нет', callback_data='nicht1')
-        bot.send_message(a.message.chat.id,main.currency())
+        bot.send_message(a.message.chat.id, main.currency())
         markup_reply10.add(bt_1,bt_2)
         bot.send_message(a.message.chat.id, "Что-нибудь ещё?", reply_markup=markup_reply10)
         
@@ -188,4 +188,4 @@ def send_text(message):
         return handle_command(message)
 
 
-bot.polling()
+bot.polling(none_stop=True)

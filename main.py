@@ -75,16 +75,6 @@ def list_edit(elem):
     mes = date + '\t\n\t' + sub
     return mes
 
-def currency():
-    cb=[]
-    response = requests.get("https://cbr.ru/")
-    soup = BeautifulSoup(response.content, 'html.parser')
-    rate = soup.find_all('div', class_='main-indicator_rates-table')
-    for data in rate:
-        if soup.find_all('div', class_='main-indicator_rates-table'):
-            cb.append(data.text)
-    return cb
-
 def stake():
     st=[]
     response = requests.get("https://www.cbr.ru")
@@ -110,7 +100,7 @@ def currency():
             cb.append(data.text)
     new_list = [word for line in cb for word in line.split()]
     for ind in range(len(new_list)):
-        if ind in [2, 5, 11, 16, 22]:
+        if ind in [ 4, 10, 15, 21]:
             new_list.insert(ind,'\n')
     return '\t'.join(new_list)
 
