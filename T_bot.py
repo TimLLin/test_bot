@@ -3,7 +3,7 @@ import main
 from telebot import types
 from datetime import datetime
 
-bot = telebot.TeleBot(main.token_test)
+bot = telebot.TeleBot(main.token_finufa)
 
 
 @bot.message_handler(commands=['start'])

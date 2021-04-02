@@ -2,7 +2,7 @@ import requests
 from docx import Document
 from bs4 import BeautifulSoup
 
-token_test = '1739168654:AAEpDabUmUWuAJds56JrXAbKRUSNd88izOU'
+
 token_finufa = '1782052770:AAEuTYmwFszzA97utccxH4ZXoKfXeXf3TXI'
 data = {
     '110-БД.docx' : 'http://www.fa.ru/fil/ufa/student/Bak_och/110БД.docx',
