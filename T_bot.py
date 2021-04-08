@@ -3,7 +3,7 @@ import main
 from telebot import types
 from datetime import datetime
 
-bot = telebot.TeleBot(main.token_finufa)
+bot = telebot.TeleBot(main.token)
 
 
 @bot.message_handler(commands=['start'])
@@ -75,10 +75,14 @@ def start_answer(a):
         try:
             week_schedule = main.w_schedule(main.var)
             for elem in week_schedule:
-                mes = main.list_edit(elem)
-                bot.send_message(a.message.chat.id, mes)
+                try:
+                    mes = main.list_edit(elem)
+                    bot.send_message(a.message.chat.id, mes)
+                except IndexError:
+                    bot.send_message(a.message.chat.id, "-")
         except ValueError:
-            bot.send_document(a.message.chat.id,schedule)
+            bot.send_document(a.message.chat.id, schedule)
+
 
         markup_reply5 = types.InlineKeyboardMarkup()
         bt_3 = types.InlineKeyboardButton(text='Да', callback_data='yes')
@@ -91,11 +95,15 @@ def start_answer(a):
         try:
             week_schedule = main.w_schedule(main.var)
             weekday = datetime.weekday(datetime.now())
-            if weekday in [5,6]:
-                bot.send_message(a.message.chat.id, "Бип боп расписание обновляется")
-            else:
-                mes = main.list_edit(week_schedule[weekday])
-                bot.send_message(a.message.chat.id, mes)
+            try:
+                if weekday in [5,6]:
+                    bot.send_message(a.message.chat.id, "Бип боп расписание обновляется")
+                else:
+                    mes = main.list_edit(week_schedule[weekday])
+                    bot.send_message(a.message.chat.id, mes)
+            except IndexError:
+                bot.send_message(a.message.chat.id,
+                                 "Данных нет. \nИспользуйте расписание на неделю или обратитесь к старосте вашей группы.")
         except ValueError:
             bot.send_document(a.message.chat.id,schedule)
         markup_reply5 = types.InlineKeyboardMarkup()
@@ -109,17 +117,22 @@ def start_answer(a):
         try:
             week_schedule = main.w_schedule(main.var)
             weekday = datetime.weekday(datetime.now())+1
-            if weekday in [5,6]:
-                bot.send_message(a.message.chat.id, "Бип боп расписание обновляется")
-            elif weekday ==7:
-                weekday = 0
-                mes = main.list_edit(week_schedule[weekday])
-                bot.send_message(a.message.chat.id, mes)
-            else:
-                mes = main.list_edit(week_schedule[weekday])
-                bot.send_message(a.message.chat.id, mes)
+            try:
+                if weekday in [5,6]:
+                    bot.send_message(a.message.chat.id, "Бип боп расписание обновляется")
+                elif weekday ==7:
+                    weekday = 0
+                    mes = main.list_edit(week_schedule[weekday])
+                    bot.send_message(a.message.chat.id, mes)
+                else:
+                    mes = main.list_edit(week_schedule[weekday])
+                    bot.send_message(a.message.chat.id, mes)
+            except IndexError:
+                bot.send_message(a.message.chat.id,
+                                 "Данных нет. \nИспользуйте расписание на неделю или обратитесь к старосте вашей группы.")
         except ValueError:
             bot.send_document(a.message.chat.id, schedule)
+
         markup_reply5 = types.InlineKeyboardMarkup()
         bt_3 = types.InlineKeyboardButton(text='Да', callback_data='yes')
         bt_4 = types.InlineKeyboardButton(text='Нет', callback_data='no')

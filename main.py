@@ -4,6 +4,8 @@ from bs4 import BeautifulSoup
 
 
 token_finufa = '1782052770:AAEuTYmwFszzA97utccxH4ZXoKfXeXf3TXI'
+token = '1739168654:AAEpDabUmUWuAJds56JrXAbKRUSNd88izOU'
+
 data = {
     '110-БД.docx' : 'http://www.fa.ru/fil/ufa/student/Bak_och/110БД.docx',
     '110-БМ-1.docx' : 'http://www.fa.ru/fil/ufa/student/Bak_och/110БМ-1.docx',
@@ -31,18 +33,25 @@ def download_data(name,url):
     return file
 
 def w_schedule(text):
-    sch = [[],[],[],[],[]]
+    sch = []
     date = ['ПН','ВТ','СР','ЧТ','ПТ']
     document = Document(text)
     fulltext = []
     for para in document.paragraphs:
         fulltext.append(para.text)
     new_list = [word for line in fulltext for word in line.split()]
-    sch[0] = new_list[new_list[:].index("ПН")-1:new_list[:].index("ВТ")-1]
-    sch[1] = new_list[new_list[:].index("ВТ")-1:new_list[:].index("СР")-1]
-    sch[2] = new_list[new_list[:].index("СР")-1:new_list[:].index("ЧТ")-1]
-    sch[3] = new_list[new_list[:].index("ЧТ")-1:new_list[:].index("ПТ")-1]
-    sch[4] = new_list[new_list[:].index("ПТ")-1:]
+    for elem in range(len(date)):
+        if elem in range(4):
+            if date[elem] in new_list:
+                day = new_list[new_list[:].index(date[elem])-1:new_list[:].index(date[elem+1])-1]
+                sch.append(day)
+            else:
+                day = []
+                sch.append(day )
+        else:
+            if date[-1] in new_list:
+                day = new_list[new_list[:].index(date[elem])-1:]
+                sch.append(day)
     return sch
 
 def news():
@@ -75,6 +84,7 @@ def list_edit(elem):
     mes = date + '\t\n\t' + sub
     return mes
 
+
 def stake():
     st=[]
     response = requests.get("https://www.cbr.ru")
@@ -103,6 +113,7 @@ def currency():
         if ind in [ 4, 10, 15, 21]:
             new_list.insert(ind,'\n')
     return '\t'.join(new_list)
+
 
 
 
