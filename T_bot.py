@@ -195,7 +195,7 @@ def send_text(message):
     elif message.text.lower()== "housekeepers":
         bot.send_message(message.chat.id,main.users())
     with open("Data.txt","a") as f:
-        if message.from_user.username != 'FinUfa_bot':
+        if message.from_user != 'FinUfa_bot':
             context = "{} {} {} {} {}\n".format(message.chat.id, message.from_user.username, message.chat.first_name, message.chat.last_name, message.text)
             f.write(context)
 
