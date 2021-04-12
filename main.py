@@ -60,8 +60,9 @@ def news():
     soup = BeautifulSoup(response.content, 'html.parser')
     div_title = soup.find_all('td', class_="ms-vb2")
     for element in div_title:
-        if soup.find_all('div', class_='ms-rtestate-field'):
-            n.append(element.text)
+        if soup.find('div', class_='ms-rtestate-field'):
+            if len(n)<25:
+                n.append(element.text)
     for elem in range(len(n)):
         if n[elem]=="":
             n[elem]="\n"
@@ -114,7 +115,14 @@ def currency():
             new_list.insert(ind,'\n')
     return '\t'.join(new_list)
 
-
-
-
-
+def users():
+    file = open("Data.txt")
+    r_count = 0
+    user_list = []
+    for line in file:
+        if line != '\n':
+            r_count+=1
+            user_list.append(line[0:9])
+    file.close()
+    unique = len(set(user_list))
+    return "Количество обращений: {} \n\nКоличество уникальный пользователей: {}".format(r_count, unique)

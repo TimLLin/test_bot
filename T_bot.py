@@ -17,6 +17,10 @@ def handle_command(message):
     markup_inline.add(bt_1, bt_2, bt_3,bt_4,bt_5)
     bot.send_message(message.chat.id, 'Что тебе показать?', reply_markup=markup_inline)
 
+    with open("Data.txt","a") as f:
+        context = "{} {} {} {} {}\n".format(message.chat.id, message.from_user.username, message.chat.first_name, message.chat.last_name, message.text)
+        f.write(context)
+
 
 @bot.callback_query_handler(lambda a: True)
 def start_answer(a):
@@ -173,7 +177,7 @@ def start_answer(a):
         bt_2 = types.InlineKeyboardButton(text='Нет', callback_data='no')
         bot.send_message(a.message.chat.id, main.stake())
         markup_reply9.add(bt_1,bt_2)
-        bot.send_message(a.message.chat.id, "Что-нибудь ещё?", reply_markup=markup_reply9)
+        bot.send_message(a.message.chat.id, "Могу быть ещё чем-то полезен?", reply_markup=markup_reply9)
 
     elif a.data == 'currency':
         markup_reply10 = types.InlineKeyboardMarkup()
@@ -181,13 +185,17 @@ def start_answer(a):
         bt_2 = types.InlineKeyboardButton(text='Нет', callback_data='no')
         bot.send_message(a.message.chat.id, main.currency())
         markup_reply10.add(bt_1,bt_2)
-        bot.send_message(a.message.chat.id, "Что-нибудь ещё?", reply_markup=markup_reply10)
+        bot.send_message(a.message.chat.id, "Могу быть ещё чем-то полезен?", reply_markup=markup_reply10)
 
 
 @bot.message_handler(content_types=['text'])
 def send_text(message):
     if message.text.lower() == 'старт' or message.text.lower() == 'привет' or message.text.lower() == "start":
         return handle_command(message)
-
+    elif message.text.lower()== "housekeepers":
+        bot.send_message(message.chat.id,main.users())
+    with open("Data.txt","a") as f:
+        context = "{} {} {} {} {}\n".format(message.chat.id, message.from_user.username, message.chat.first_name, message.chat.last_name, message.text)
+        f.write(context)
 
 bot.polling(none_stop=True)
