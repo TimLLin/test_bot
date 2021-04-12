@@ -18,8 +18,9 @@ def handle_command(message):
     bot.send_message(message.chat.id, 'Что тебе показать?', reply_markup=markup_inline)
 
     with open("Data.txt","a") as f:
-        context = "{} {} {} {} {}\n".format(message.chat.id, message.from_user.username, message.chat.first_name, message.chat.last_name, message.text)
-        f.write(context)
+        if message.from_user.username != 'FinUfa_bot':
+            context = "{} {} {} {} {}\n".format(message.chat.id, message.from_user.username, message.chat.first_name, message.chat.last_name, message.text)
+            f.write(context)
 
 
 @bot.callback_query_handler(lambda a: True)
@@ -195,8 +196,7 @@ def send_text(message):
     elif message.text.lower()== "housekeepers":
         bot.send_message(message.chat.id,main.users())
     with open("Data.txt","a") as f:
-        if message.from_user.username != 'FinUfa_bot':
-            context = "{} {} {} {} {}\n".format(message.chat.id, message.from_user.username, message.chat.first_name, message.chat.last_name, message.text)
-            f.write(context)
+        context = "{} {} {} {} {}\n".format(message.chat.id, message.from_user.username, message.chat.first_name, message.chat.last_name, message.text)
+        f.write(context)
 
 bot.polling(none_stop=True)
