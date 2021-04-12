@@ -143,9 +143,9 @@ def start_answer(a):
         return handle_command(a.message)
     elif a.data == "no":
         markup_reply6 = types.InlineKeyboardMarkup()
-        bt_5 = types.InlineKeyboardButton(text='Тык', callback_data='yes')
+        bt_5 = types.InlineKeyboardButton(text='*активировать бота*', callback_data='yes')
         markup_reply6.add(bt_5)
-        bot.send_message(a.message.chat.id, "Как только понадоблюсь - тыкни!", reply_markup=markup_reply6)
+        bot.send_message(a.message.chat.id, "Как только понадоблюсь - нажми", reply_markup=markup_reply6)
 
     elif a.data == 'news':
         test = main.news()
@@ -170,7 +170,7 @@ def start_answer(a):
     elif a.data == 'stake':
         markup_reply9 = types.InlineKeyboardMarkup()
         bt_1 = types.InlineKeyboardButton(text='Да', callback_data='yes')
-        bt_2 = types.InlineKeyboardButton(text='Нет', callback_data='nicht')
+        bt_2 = types.InlineKeyboardButton(text='Нет', callback_data='no')
         bot.send_message(a.message.chat.id, main.stake())
         markup_reply9.add(bt_1,bt_2)
         bot.send_message(a.message.chat.id, "Что-нибудь ещё?", reply_markup=markup_reply9)
@@ -178,22 +178,11 @@ def start_answer(a):
     elif a.data == 'currency':
         markup_reply10 = types.InlineKeyboardMarkup()
         bt_1 = types.InlineKeyboardButton(text='Да', callback_data='yes')
-        bt_2 = types.InlineKeyboardButton(text='Нет', callback_data='nicht1')
+        bt_2 = types.InlineKeyboardButton(text='Нет', callback_data='no')
         bot.send_message(a.message.chat.id, main.currency())
         markup_reply10.add(bt_1,bt_2)
         bot.send_message(a.message.chat.id, "Что-нибудь ещё?", reply_markup=markup_reply10)
-        
-    elif a.data == "nicht":
-        markup_reply11 = types.InlineKeyboardMarkup()
-        bt_5 = types.InlineKeyboardButton(text='*свистнуть*', callback_data='yes')
-        markup_reply11.add(bt_5)
-        bot.send_message(a.message.chat.id, "Только свистни - я всегда готов", reply_markup=markup_reply11)
-    
-    elif a.data == "nicht1":
-        markup_reply12 = types.InlineKeyboardMarkup()
-        bt_5 = types.InlineKeyboardButton(text='*позвать*', callback_data='yes')
-        markup_reply12.add(bt_5)
-        bot.send_message(a.message.chat.id, "Позови, как понадоблюсь!", reply_markup=markup_reply12)
+
 
 @bot.message_handler(content_types=['text'])
 def send_text(message):
