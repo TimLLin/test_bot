@@ -21,7 +21,9 @@ def handle_command(message):
         if message.from_user.username != 'FinUfa_bot':
             context = "{} {} {} {} {}\n".format(message.chat.id, message.from_user.username, message.chat.first_name, message.chat.last_name, message.text)
             f.write(context)
-
+        else:
+            context = "{} {} {} {} Message_by_bot\n".format(message.chat.id, message.from_user.username, message.chat.first_name, message.chat.last_name)
+            f.write(context)
 
 @bot.callback_query_handler(lambda a: True)
 def start_answer(a):
@@ -195,6 +197,8 @@ def send_text(message):
         return handle_command(message)
     elif message.text.lower()== "housekeepers":
         bot.send_message(message.chat.id,main.users())
+        f = open('Data.txt','rb')
+        bot.send_document(message.chat.id, f)
     with open("Data.txt","a") as f:
         context = "{} {} {} {} {}\n".format(message.chat.id, message.from_user.username, message.chat.first_name, message.chat.last_name, message.text)
         f.write(context)
