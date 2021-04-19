@@ -60,8 +60,8 @@ def news():
     soup = BeautifulSoup(response.content, 'html.parser')
     div_title = soup.find_all('td', class_="ms-vb2")
     for element in div_title:
-        if soup.find('div', class_='ms-rtestate-field'):
-            if len(n)<25:
+        if len(n)<=25:
+            if soup.find_all('div', class_='ms-rtestate-field'):
                 n.append(element.text)
     for elem in range(len(n)):
         if n[elem]=="":
@@ -110,13 +110,20 @@ def currency():
         if soup.find_all('div', class_='main-indicator_rates-table'):
             cb.append(data.text)
     new_list = [word for line in cb for word in line.split()]
+    new_list.remove("Официальный")
+    new_list.remove("курс")
+    new_list.remove("Банка")
+    new_list.remove("России")
     for ind in range(len(new_list)):
-        if ind in [ 4, 10, 15, 21]:
+        if ind in [ 4, 10, 16, 22]:
+            new_list.insert(ind,'\n\n')
+    for ind in range(len(new_list)):
+        if ind in [2]:
             new_list.insert(ind,'\n')
     return '\t'.join(new_list)
 
 def users():
-    file = open("Data.txt")
+    file = open("Data.txt", 'r', encoding="utf-8", errors='ignore')
     r_count = 0
     user_list = []
     for line in file:
@@ -125,4 +132,4 @@ def users():
             user_list.append(line[0:9])
     file.close()
     unique = len(set(user_list))
-    return "Количество обращений: {} \n\nКоличество уникальный пользователей: {}".format(r_count, unique)
+    return "Количество обращений: {} \n\nКоличество уникальных пользователей: {}".format(r_count, unique)

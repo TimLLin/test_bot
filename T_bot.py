@@ -16,14 +16,14 @@ def handle_command(message):
     bt_5 = types.InlineKeyboardButton(text='Данные ЦБ', callback_data='cb')
     markup_inline.add(bt_1, bt_2, bt_3,bt_4,bt_5)
     bot.send_message(message.chat.id, 'Что тебе показать?', reply_markup=markup_inline)
-
-    with open("Data.txt","a") as f:
+    with open("Data.txt","a",encoding='utf-8',errors='ignore') as f:
         if message.from_user.username != 'FinUfa_bot':
             context = "{} {} {} {} {}\n".format(message.chat.id, message.from_user.username, message.chat.first_name, message.chat.last_name, message.text)
             f.write(context)
         else:
             context = "{} {} {} {} Message_by_bot\n".format(message.chat.id, message.from_user.username, message.chat.first_name, message.chat.last_name)
             f.write(context)
+            
 
 @bot.callback_query_handler(lambda a: True)
 def start_answer(a):
@@ -93,9 +93,8 @@ def start_answer(a):
 
         markup_reply5 = types.InlineKeyboardMarkup()
         bt_3 = types.InlineKeyboardButton(text='Да', callback_data='yes')
-        bt_4 = types.InlineKeyboardButton(text='Нет', callback_data='no')
-        markup_reply5.add(bt_3, bt_4)
-        bot.send_message(a.message.chat.id, "Могу быть ещё чем-то полезен?", reply_markup=markup_reply5)
+        markup_reply5.add(bt_3)
+        bot.send_message(a.message.chat.id, "Вернуться в главное меню?", reply_markup=markup_reply5)
 
     elif a.data == "today":
         schedule = main.download_data(main.var, main.data[main.var])
@@ -104,7 +103,7 @@ def start_answer(a):
             weekday = datetime.weekday(datetime.now())
             try:
                 if weekday in [5,6]:
-                    bot.send_message(a.message.chat.id, "Бип боп расписание обновляется")
+                    bot.send_message(a.message.chat.id, "Бип боп расписание обновляется.\nИспользуйте расписание на неделю.")
                 else:
                     mes = main.list_edit(week_schedule[weekday])
                     bot.send_message(a.message.chat.id, mes)
@@ -115,9 +114,8 @@ def start_answer(a):
             bot.send_document(a.message.chat.id,schedule)
         markup_reply5 = types.InlineKeyboardMarkup()
         bt_3 = types.InlineKeyboardButton(text='Да', callback_data='yes')
-        bt_4 = types.InlineKeyboardButton(text='Нет', callback_data='no')
-        markup_reply5.add(bt_3, bt_4)
-        bot.send_message(a.message.chat.id, "Могу быть ещё чем-то полезен?", reply_markup=markup_reply5)
+        markup_reply5.add(bt_3)
+        bot.send_message(a.message.chat.id, "Вернуться в главное меню?", reply_markup=markup_reply5)
 
     elif a.data == "tommorow":
         schedule = main.download_data(main.var, main.data[main.var])
@@ -126,7 +124,7 @@ def start_answer(a):
             weekday = datetime.weekday(datetime.now())+1
             try:
                 if weekday in [5,6]:
-                    bot.send_message(a.message.chat.id, "Бип боп расписание обновляется")
+                    bot.send_message(a.message.chat.id, "Бип боп расписание обновляется.\nИспользуйте расписание на неделю.")
                 elif weekday ==7:
                     weekday = 0
                     mes = main.list_edit(week_schedule[weekday])
@@ -142,17 +140,12 @@ def start_answer(a):
 
         markup_reply5 = types.InlineKeyboardMarkup()
         bt_3 = types.InlineKeyboardButton(text='Да', callback_data='yes')
-        bt_4 = types.InlineKeyboardButton(text='Нет', callback_data='no')
         markup_reply5.add(bt_3, bt_4)
-        bot.send_message(a.message.chat.id, "Могу быть ещё чем-то полезен?", reply_markup=markup_reply5)
+        bot.send_message(a.message.chat.id, "Вернуться в главное меню?", reply_markup=markup_reply5)
 
     elif a.data == 'yes':
         return handle_command(a.message)
-    elif a.data == "no":
-        markup_reply6 = types.InlineKeyboardMarkup()
-        bt_5 = types.InlineKeyboardButton(text='*активировать бота*', callback_data='yes')
-        markup_reply6.add(bt_5)
-        bot.send_message(a.message.chat.id, "Как только понадоблюсь - нажми", reply_markup=markup_reply6)
+
 
     elif a.data == 'news':
         test = main.news()
@@ -177,18 +170,16 @@ def start_answer(a):
     elif a.data == 'stake':
         markup_reply9 = types.InlineKeyboardMarkup()
         bt_1 = types.InlineKeyboardButton(text='Да', callback_data='yes')
-        bt_2 = types.InlineKeyboardButton(text='Нет', callback_data='no')
         bot.send_message(a.message.chat.id, main.stake())
-        markup_reply9.add(bt_1,bt_2)
-        bot.send_message(a.message.chat.id, "Могу быть ещё чем-то полезен?", reply_markup=markup_reply9)
+        markup_reply9.add(bt_1)
+        bot.send_message(a.message.chat.id, "Вернуться в главное меню?", reply_markup=markup_reply9)
 
     elif a.data == 'currency':
         markup_reply10 = types.InlineKeyboardMarkup()
         bt_1 = types.InlineKeyboardButton(text='Да', callback_data='yes')
-        bt_2 = types.InlineKeyboardButton(text='Нет', callback_data='no')
         bot.send_message(a.message.chat.id, main.currency())
-        markup_reply10.add(bt_1,bt_2)
-        bot.send_message(a.message.chat.id, "Могу быть ещё чем-то полезен?", reply_markup=markup_reply10)
+        markup_reply10.add(bt_1)
+        bot.send_message(a.message.chat.id, "Вернуться в главное меню?", reply_markup=markup_reply10)
 
 
 @bot.message_handler(content_types=['text'])
@@ -196,11 +187,16 @@ def send_text(message):
     if message.text.lower() == 'старт' or message.text.lower() == 'привет' or message.text.lower() == "start":
         return handle_command(message)
     elif message.text.lower()== "housekeepers":
-        bot.send_message(message.chat.id,main.users())
-        f = open('Data.txt','rb')
-        bot.send_document(message.chat.id, f)
-    with open("Data.txt","a") as f:
+        try:
+            bot.send_message(message.chat.id,main.users())
+            f = open("Data.txt", "rb")
+            bot.send_document(message.chat.id, f)
+        except UnicodeDecodeError:
+            bot.send_message(message.chat.id,":(((")
+    with open("Data.txt","a",encoding='utf-8',errors='ignore') as f:
         context = "{} {} {} {} {}\n".format(message.chat.id, message.from_user.username, message.chat.first_name, message.chat.last_name, message.text)
         f.write(context)
+    
+   
 
-bot.polling(none_stop=True)
+bot.polling()
