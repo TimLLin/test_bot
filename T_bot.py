@@ -234,18 +234,80 @@ def start_answer(a):
         bot.send_message(a.message.chat.id, "Могу быть ещё чем-то полезен?", reply_markup=markup_reply13)
 
     elif a.data == 'm_nap':
-        bot.send_message(a.message.chat.id, '''В нашем университете имеются следующие направления подготовки бакалавров:
-            38.03.01 Экономика 
-            38.03.02 Менеджмент
+        markup_reply_mag = types.InlineKeyboardMarkup()
+        bt_1 = types.InlineKeyboardButton(text='Назад', callback_data='back_mag')
+        markup_reply_mag.add(bt_1)
+        bot.send_message(a.message.chat.id, '''В нашем университете имеются следующие направления подготовки магистров:
+            38.04.01 Экономика 
+            38.04.02 Менеджмент
             
 Ознакомиться с программами обучения вы можете по [ссылке](http://www.fa.ru/fil/ufa/pk/mag/Pages/progs.aspx)''',
-                         parse_mode="Markdown", disable_web_page_preview='true')
+                         parse_mode="Markdown", disable_web_page_preview='true', reply_markup=markup_reply_mag)
 
     elif a.data == 'exam_mag':
-        bot.send_document(a.message.chat.id, open("Перечень вступительных испытаний_магистратура.pdf", 'rb'))
+        markup_reply_mag = types.InlineKeyboardMarkup()
+        bt_1 = types.InlineKeyboardButton(text='Назад', callback_data='back_mag')
+        markup_reply_mag.add(bt_1)
+        bot.send_document(a.message.chat.id, open("Перечень вступительных испытаний_магистратура.pdf", 'rb'), reply_markup=markup_reply_mag)
 
     elif a.data == 'm_deadline':
-        bot.send_document(a.message.chat.id, open("Сроки приемной кампании_магистратура.pdf", 'rb'))
+        markup_reply_mag = types.InlineKeyboardMarkup()
+        bt_1 = types.InlineKeyboardButton(text='Назад', callback_data='back_mag')
+        markup_reply_mag.add(bt_1)
+        bot.send_document(a.message.chat.id, open("Сроки приемной кампании_магистратура.pdf", 'rb'), reply_markup=markup_reply_mag)
+
+    elif a.data == 'back_mag':
+        a.data = 'mag'
+        return start_answer(a)
+
+    elif a.data == 'cpo':
+        markup_reply14 = types.InlineKeyboardMarkup()
+        bt_1 = types.InlineKeyboardButton(text='Специальности', callback_data='spec_spo')
+        bt_2 = types.InlineKeyboardButton(text='Сроки', callback_data='spo_deadline')
+        bt_3 = types.InlineKeyboardButton(text='Контрольные цифры приема', callback_data='spo_kcp')
+        bt_4 = types.InlineKeyboardButton(text='Назад', callback_data='back_abi')
+        markup_reply14.add(bt_1, bt_2)
+        markup_reply14.add(bt_3)
+        markup_reply14.add(bt_4)
+        bot.send_message(a.message.chat.id, "Могу быть ещё чем-то полезен?", reply_markup=markup_reply14)
+
+    elif a.data == 'spec_spo':
+        markup_reply_cpo = types.InlineKeyboardMarkup()
+        bt_1 = types.InlineKeyboardButton(text='Назад', callback_data='back_spo')
+        markup_reply_cpo.add(bt_1)
+        bot.send_message(a.message.chat.id, '''В нашем университете имеются следующие направления подготовки специалистов:
+                    38.02.07 Банковское дело
+                    38.02.06 Финансы
+                    38.02.01 Экономика и бухгалтерский учет  (по отраслям)
+                    38.02.02 Страховое дело  (по отраслям)
+                    09.02.05 Прикладная информатика (по отраслям)
+                    40.02.01 Право и организация социального обеспечения
+
+Ознакомиться с программами обучения вы можете по [ссылке](http://www.fa.ru/fil/ufa/pk/spo/Pages/specs.aspx)''',
+                         parse_mode="Markdown", disable_web_page_preview='true', reply_markup = markup_reply_cpo)
+
+    elif a.data == "spo_deadline":
+        markup_reply_cpo = types.InlineKeyboardMarkup()
+        bt_1 = types.InlineKeyboardButton(text='Назад', callback_data='back_spo')
+        markup_reply_cpo.add(bt_1)
+        bot.send_document(a.message.chat.id, open("Сроки приемной кампании 2021 года_СПО.pdf", 'rb'),reply_markup=markup_reply_cpo)
+
+    elif a.data == "spo_kcp":
+        markup_reply_cpo = types.InlineKeyboardMarkup()
+        bt_1 = types.InlineKeyboardButton(text='Назад', callback_data='back_spo')
+        markup_reply_cpo.add(bt_1)
+        bot.send_document(a.message.chat.id, open("Контрольные цифры приема_СПО.PDF", 'rb'),reply_markup=markup_reply_cpo)
+
+    elif a.data == "back_spo":
+        a.data = 'cpo'
+        return start_answer(a)
+
+
+
+
+
+
+
 
         
 
