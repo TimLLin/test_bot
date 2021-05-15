@@ -3,7 +3,7 @@ import main
 from telebot import types
 from datetime import datetime
 
-bot = telebot.TeleBot(main.token_finufa)
+bot = telebot.TeleBot(main.token)
 
 
 @bot.message_handler(commands=['start'])
@@ -14,7 +14,9 @@ def handle_command(message):
     bt_3 = types.InlineKeyboardButton(text='Помощь', callback_data='help')
     bt_4 = types.InlineKeyboardButton(text='Новости', callback_data='news')
     bt_5 = types.InlineKeyboardButton(text='Данные ЦБ', callback_data='cb')
-    markup_inline.add(bt_1, bt_2, bt_3,bt_4,bt_5)
+    bt_6 = types.InlineKeyboardButton(text='Абитуриенту', callback_data='abi')
+    markup_inline.add(bt_1, bt_2, bt_3, bt_4, bt_5)
+    markup_inline.add(bt_6)
     bot.send_message(message.chat.id, 'Что тебе показать?', reply_markup=markup_inline)
     with open("Data.txt","a",encoding='utf-8',errors='ignore') as f:
         if message.from_user.username != 'FinUfa_bot':
@@ -140,7 +142,7 @@ def start_answer(a):
 
         markup_reply5 = types.InlineKeyboardMarkup()
         bt_3 = types.InlineKeyboardButton(text='Да', callback_data='yes')
-        markup_reply5.add(bt_3, bt_4)
+        markup_reply5.add(bt_3)
         bot.send_message(a.message.chat.id, "Вернуться в главное меню?", reply_markup=markup_reply5)
 
     elif a.data == 'yes':
@@ -180,6 +182,72 @@ def start_answer(a):
         bot.send_message(a.message.chat.id, main.currency())
         markup_reply10.add(bt_1)
         bot.send_message(a.message.chat.id, "Вернуться в главное меню?", reply_markup=markup_reply10)
+
+    elif a.data == 'abi':
+        markup_reply11 = types.InlineKeyboardMarkup()
+        bt_1 = types.InlineKeyboardButton(text='Бакалавриат', callback_data='bak')
+        bt_2 = types.InlineKeyboardButton(text='Магистратура', callback_data='mag')
+        bt_3 = types.InlineKeyboardButton(text='CПО', callback_data='cpo')
+        bt_4 = types.InlineKeyboardButton(text='Назад', callback_data='yes')
+        markup_reply11.add(bt_1, bt_2, bt_3, bt_4)
+        bot.send_message(a.message.chat.id, "Могу быть ещё чем-то полезен?", reply_markup=markup_reply11)
+
+    elif a.data == "bak":
+        markup_reply12 = types.InlineKeyboardMarkup()
+        bt_1 = types.InlineKeyboardButton(text='Направления', callback_data='b_nap')
+        bt_2 = types.InlineKeyboardButton(text='Сроки', callback_data='b_deadline')
+        bt_3 = types.InlineKeyboardButton(text='Вступительные экзамены', callback_data='exam_bak')
+        bt_4 = types.InlineKeyboardButton(text='Назад', callback_data='back_abi')
+        markup_reply12.add(bt_1, bt_2)
+        markup_reply12.add(bt_3)
+        markup_reply12.add(bt_4)
+        bot.send_message(a.message.chat.id, "Могу быть ещё чем-то полезен?", reply_markup=markup_reply12)
+
+    elif a.data == 'b_nap':
+        bot.send_message(a.message.chat.id, '''В нашем университете имеются следующие направления подготовки бакалавров:
+            38.03.01 Экономика 
+            38.03.02 Менеджмент 
+            38.03.05 Бизнес-информатика
+            
+Ознакомиться с программами обучения вы можете по [ссылке](http://www.fa.ru/fil/ufa/pk/bak/Pages/progs.aspx)''',
+                         parse_mode="Markdown", disable_web_page_preview='true')
+
+    elif a.data == 'b_deadline':
+        bot.send_document(a.message.chat.id,open("Сроки приемной комиссии Бак.pdf",'rb'))
+
+    elif a.data == 'exam_bak':
+        bot.send_document(a.message.chat.id,open("Перечень вступительных испытаний БАК.pdf",'rb'))
+
+    elif a.data == 'back_abi':
+        a.data = 'abi'
+        return start_answer(a)
+
+    elif a.data == 'mag':
+        markup_reply13 = types.InlineKeyboardMarkup()
+        bt_1 = types.InlineKeyboardButton(text='Направления', callback_data='m_nap')
+        bt_2 = types.InlineKeyboardButton(text='Сроки', callback_data='m_deadline')
+        bt_3 = types.InlineKeyboardButton(text='Вступительные экзамены', callback_data='exam_mag')
+        bt_4 = types.InlineKeyboardButton(text='Назад', callback_data='back_abi')
+        markup_reply13.add(bt_1, bt_2)
+        markup_reply13.add(bt_3)
+        markup_reply13.add(bt_4)
+        bot.send_message(a.message.chat.id, "Могу быть ещё чем-то полезен?", reply_markup=markup_reply13)
+
+    elif a.data == 'm_nap':
+        bot.send_message(a.message.chat.id, '''В нашем университете имеются следующие направления подготовки бакалавров:
+            38.03.01 Экономика 
+            38.03.02 Менеджмент
+            
+Ознакомиться с программами обучения вы можете по [ссылке](http://www.fa.ru/fil/ufa/pk/mag/Pages/progs.aspx)''',
+                         parse_mode="Markdown", disable_web_page_preview='true')
+
+    elif a.data == 'exam_mag':
+        bot.send_document(a.message.chat.id, open("Перечень вступительных испытаний_магистратура.pdf", 'rb'))
+
+    elif a.data == 'm_deadline':
+        bot.send_document(a.message.chat.id, open("Сроки приемной кампании_магистратура.pdf", 'rb'))
+
+        
 
 
 @bot.message_handler(content_types=['text'])

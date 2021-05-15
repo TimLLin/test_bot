@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 
 
 token_finufa = '1782052770:AAEuTYmwFszzA97utccxH4ZXoKfXeXf3TXI'
-token = '1739168654:AAEpDabUmUWuAJds56JrXAbKRUSNd88izOU'
+token = '1777347114:AAEow6W4NmD1r6OYCmKCtjMRth7olY9hOHk'
 
 data = {
     '110-БД.docx' : 'http://www.fa.ru/fil/ufa/student/Bak_och/110БД.docx',
