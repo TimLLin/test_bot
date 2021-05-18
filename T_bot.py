@@ -197,10 +197,13 @@ def start_answer(a):
         bt_1 = types.InlineKeyboardButton(text='Направления', callback_data='b_nap')
         bt_2 = types.InlineKeyboardButton(text='Сроки', callback_data='b_deadline')
         bt_3 = types.InlineKeyboardButton(text='Вступительные экзамены', callback_data='exam_bak')
-        bt_4 = types.InlineKeyboardButton(text='Назад', callback_data='back_abi')
-        markup_reply12.add(bt_1, bt_2)
+        bt_4 = types.InlineKeyboardButton(text='Мин. баллы', callback_data='prohod_bak')
+        bt_5 = types.InlineKeyboardButton(text='Контрольные цифры приема', callback_data='kcp_bak')
+        bt_6 = types.InlineKeyboardButton(text='Назад', callback_data='back_abi')
+        markup_reply12.add(bt_1, bt_2,bt_4)
         markup_reply12.add(bt_3)
-        markup_reply12.add(bt_4)
+        markup_reply12.add(bt_5)
+        markup_reply12.add(bt_6)
         bot.send_message(a.message.chat.id, "Могу быть ещё чем-то полезен?", reply_markup=markup_reply12)
 
     elif a.data == 'b_nap':
@@ -218,6 +221,13 @@ def start_answer(a):
     elif a.data == 'exam_bak':
         bot.send_document(a.message.chat.id,open("Перечень вступительных испытаний БАК.pdf",'rb'))
 
+    elif a.data == 'prohod_bak':
+        bot.send_document(a.message.chat.id, open("Минимальные баллы приема_бак.pdf",'rb'))
+
+    elif a.data == 'kcp_bak':
+        bot.send_document(a.message.chat.id, open("Контрольные цифры приема_бак.pdf", 'rb'))
+
+
     elif a.data == 'back_abi':
         a.data = 'abi'
         return start_answer(a)
@@ -227,9 +237,11 @@ def start_answer(a):
         bt_1 = types.InlineKeyboardButton(text='Направления', callback_data='m_nap')
         bt_2 = types.InlineKeyboardButton(text='Сроки', callback_data='m_deadline')
         bt_3 = types.InlineKeyboardButton(text='Вступительные экзамены', callback_data='exam_mag')
+        bt_5 = types.InlineKeyboardButton(text='Контрольные цифры приема', callback_data='kcp_mag')
         bt_4 = types.InlineKeyboardButton(text='Назад', callback_data='back_abi')
         markup_reply13.add(bt_1, bt_2)
         markup_reply13.add(bt_3)
+        markup_reply13.add(bt_5)
         markup_reply13.add(bt_4)
         bot.send_message(a.message.chat.id, "Могу быть ещё чем-то полезен?", reply_markup=markup_reply13)
 
@@ -255,6 +267,9 @@ def start_answer(a):
         bt_1 = types.InlineKeyboardButton(text='Назад', callback_data='back_mag')
         markup_reply_mag.add(bt_1)
         bot.send_document(a.message.chat.id, open("Сроки приемной кампании_магистратура.pdf", 'rb'), reply_markup=markup_reply_mag)
+
+    elif a.data == 'kcp_mag':
+        bot.send_document(a.message.chat.id, open("Контрольные цифры приема_магистратура.pdf", 'rb'))
 
     elif a.data == 'back_mag':
         a.data = 'mag'
