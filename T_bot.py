@@ -13,11 +13,12 @@ def handle_command(message):
     bt_2 = types.InlineKeyboardButton(text='Кафедры', callback_data='cafedrs')
     bt_3 = types.InlineKeyboardButton(text='Помощь', callback_data='help')
     bt_4 = types.InlineKeyboardButton(text='Новости', callback_data='news')
+    bt_5 = types.InlineKeyboardButton(text='Данные ЦБ', callback_data='cb')
     bt_6 = types.InlineKeyboardButton(text='Поступающим', callback_data='abi')
     markup_inline.add(bt_1, bt_2, bt_3,bt_4,bt_5)
     markup_inline.add(bt_6)
     bot.send_message(message.chat.id, 'Что тебе показать?', reply_markup=markup_inline)
-    with open("Data.txt","a",encoding='utf-8',errors='ignore') as f:
+    with open("Data_kek.txt", 'a', encoding="utf-8", errors='ignore') as f:
         if message.from_user.username != 'FinUfa_bot':
             context = "{} {} {} {} {}\n".format(message.chat.id, message.from_user.username, message.chat.first_name, message.chat.last_name, message.text)
             f.write(context)
@@ -213,7 +214,7 @@ def start_answer(a):
         markup_reply12.add(bt_3)
         markup_reply12.add(bt_5)
         markup_reply12.add(bt_6)
-        bot.send_message(a.message.chat.id, "Могу быть ещё чем-то полезен?", reply_markup=markup_reply12)
+        bot.send_message(a.message.chat.id, "Уфимский филиал Финуниверситета даёт возможность получить диплом *бакалавра* в ведущем российском вузе.", reply_markup=markup_reply12, parse_mode='Markdown')
     
     elif a.data == 'b_nap':
         markup_reply13 = types.InlineKeyboardMarkup()
@@ -274,7 +275,7 @@ def start_answer(a):
         markup_reply13.add(bt_3)
         markup_reply13.add(bt_5)
         markup_reply13.add(bt_4)
-        bot.send_message(a.message.chat.id, "Могу быть ещё чем-то полезен?", reply_markup=markup_reply13)
+        bot.send_message(a.message.chat.id, "Уфимский филиал Финуниверситета даёт возможность получить диплом *магистра* в ведущем российском вузе.", reply_markup=markup_reply13, parse_mode='Markdown')
 
     elif a.data == 'm_nap':
         markup_reply_mag = types.InlineKeyboardMarkup()
