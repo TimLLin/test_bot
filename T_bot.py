@@ -3,7 +3,7 @@ import main
 from telebot import types
 from datetime import datetime
 
-bot = telebot.TeleBot(main.token)
+bot = telebot.TeleBot(main.token_finufa)
 
 
 @bot.message_handler(commands=['start'])
@@ -13,9 +13,8 @@ def handle_command(message):
     bt_2 = types.InlineKeyboardButton(text='Кафедры', callback_data='cafedrs')
     bt_3 = types.InlineKeyboardButton(text='Помощь', callback_data='help')
     bt_4 = types.InlineKeyboardButton(text='Новости', callback_data='news')
-    bt_5 = types.InlineKeyboardButton(text='Данные ЦБ', callback_data='cb')
-    bt_6 = types.InlineKeyboardButton(text='Абитуриенту', callback_data='abi')
-    markup_inline.add(bt_1, bt_2, bt_3, bt_4, bt_5)
+    bt_6 = types.InlineKeyboardButton(text='Поступающим', callback_data='abi')
+    markup_inline.add(bt_1, bt_2, bt_3,bt_4,bt_5)
     markup_inline.add(bt_6)
     bot.send_message(message.chat.id, 'Что тебе показать?', reply_markup=markup_inline)
     with open("Data.txt","a",encoding='utf-8',errors='ignore') as f:
@@ -188,9 +187,19 @@ def start_answer(a):
         bt_1 = types.InlineKeyboardButton(text='Бакалавриат', callback_data='bak')
         bt_2 = types.InlineKeyboardButton(text='Магистратура', callback_data='mag')
         bt_3 = types.InlineKeyboardButton(text='CПО', callback_data='cpo')
-        bt_4 = types.InlineKeyboardButton(text='Назад', callback_data='yes')
-        markup_reply11.add(bt_1, bt_2, bt_3, bt_4)
-        bot.send_message(a.message.chat.id, "Могу быть ещё чем-то полезен?", reply_markup=markup_reply11)
+        bt_4 = types.InlineKeyboardButton(text='Стоимость обучения', url='http://www.fa.ru/fil/ufa/pk/Pages/price.aspx')
+        bt_5 = types.InlineKeyboardButton(text='Статистика приёма', callback_data='stat_abi')
+        bt_6 = types.InlineKeyboardButton(text='Назад', callback_data='yes')
+        markup_reply11.add(bt_1, bt_2, bt_3)
+        markup_reply11.add(bt_4, bt_5)
+        markup_reply11.add(bt_6)
+        bot.send_message(a.message.chat.id, "Какое образование вас интересует?", reply_markup=markup_reply11)
+
+    elif a.data == 'stat_abi':
+        markup_reply14 = types.InlineKeyboardMarkup()
+        bt_1 = types.InlineKeyboardButton(text='Назад', callback_data='back_abi')
+        markup_reply14.add(bt_1)
+        bot.send_document(a.message.chat.id, open("Itogi_priema_2020.pdf",'rb'), reply_markup=markup_reply14)
 
     elif a.data == "bak":
         markup_reply12 = types.InlineKeyboardMarkup()
@@ -205,29 +214,51 @@ def start_answer(a):
         markup_reply12.add(bt_5)
         markup_reply12.add(bt_6)
         bot.send_message(a.message.chat.id, "Могу быть ещё чем-то полезен?", reply_markup=markup_reply12)
-
+    
     elif a.data == 'b_nap':
+        markup_reply13 = types.InlineKeyboardMarkup()
+        bt_1 = types.InlineKeyboardButton(text='Назад', callback_data='back_bak')
+        markup_reply13.add(bt_1)
         bot.send_message(a.message.chat.id, '''В нашем университете имеются следующие направления подготовки бакалавров:
-            38.03.01 Экономика 
-            38.03.02 Менеджмент 
-            38.03.05 Бизнес-информатика
+
+38.03.01 Экономика
+
+38.03.02 Менеджмент
+
+38.03.05 Бизнес-информатика
             
 Ознакомиться с программами обучения вы можете по [ссылке](http://www.fa.ru/fil/ufa/pk/bak/Pages/progs.aspx)''',
-                         parse_mode="Markdown", disable_web_page_preview='true')
+                         parse_mode="Markdown", disable_web_page_preview='true', reply_markup=markup_reply13)
+
+    elif a.data == 'back_bak':
+        a.data = 'bak'
+        return start_answer(a)
 
     elif a.data == 'b_deadline':
-        bot.send_document(a.message.chat.id,open("Сроки приемной комиссии Бак.pdf",'rb'))
+        markup_reply14 = types.InlineKeyboardMarkup()
+        bt_1 = types.InlineKeyboardButton(text='Назад', callback_data='back_bak')
+        markup_reply14.add(bt_1)
+        bot.send_document(a.message.chat.id,open("Сроки приемной комиссии Бак.pdf",'rb'), reply_markup=markup_reply14)
+
 
     elif a.data == 'exam_bak':
-        bot.send_document(a.message.chat.id,open("Перечень вступительных испытаний БАК.pdf",'rb'))
+        markup_reply15 = types.InlineKeyboardMarkup()
+        bt_1 = types.InlineKeyboardButton(text='Назад', callback_data='back_bak')
+        markup_reply15.add(bt_1)
+        bot.send_document(a.message.chat.id,open("Перечень вступительных испытаний БАК.pdf",'rb'), reply_markup=markup_reply15)
 
     elif a.data == 'prohod_bak':
-        bot.send_document(a.message.chat.id, open("Минимальные баллы приема_бак.pdf",'rb'))
+        markup_reply15 = types.InlineKeyboardMarkup()
+        bt_1 = types.InlineKeyboardButton(text='Назад', callback_data='back_bak')
+        markup_reply15.add(bt_1) 
+        bot.send_document(a.message.chat.id, open("Минимальные баллы приема_бак.pdf",'rb'), reply_markup=markup_reply15)
 
     elif a.data == 'kcp_bak':
-        bot.send_document(a.message.chat.id, open("Контрольные цифры приема_бак.pdf", 'rb'))
-
-
+        markup_reply15 = types.InlineKeyboardMarkup()
+        bt_1 = types.InlineKeyboardButton(text='Назад', callback_data='back_bak')
+        markup_reply15.add(bt_1) 
+        bot.send_document(a.message.chat.id, open("Контрольные цифры приема_бак.pdf", 'rb'), reply_markup=markup_reply15)
+        
     elif a.data == 'back_abi':
         a.data = 'abi'
         return start_answer(a)
@@ -250,8 +281,10 @@ def start_answer(a):
         bt_1 = types.InlineKeyboardButton(text='Назад', callback_data='back_mag')
         markup_reply_mag.add(bt_1)
         bot.send_message(a.message.chat.id, '''В нашем университете имеются следующие направления подготовки магистров:
-            38.04.01 Экономика 
-            38.04.02 Менеджмент
+
+38.04.01 Экономика
+            
+38.04.02 Менеджмент
             
 Ознакомиться с программами обучения вы можете по [ссылке](http://www.fa.ru/fil/ufa/pk/mag/Pages/progs.aspx)''',
                          parse_mode="Markdown", disable_web_page_preview='true', reply_markup=markup_reply_mag)
@@ -269,7 +302,10 @@ def start_answer(a):
         bot.send_document(a.message.chat.id, open("Сроки приемной кампании_магистратура.pdf", 'rb'), reply_markup=markup_reply_mag)
 
     elif a.data == 'kcp_mag':
-        bot.send_document(a.message.chat.id, open("Контрольные цифры приема_магистратура.pdf", 'rb'))
+        markup_reply_mag = types.InlineKeyboardMarkup()
+        bt_1 = types.InlineKeyboardButton(text='Назад', callback_data='back_mag')
+        markup_reply_mag.add(bt_1)
+        bot.send_document(a.message.chat.id, open("Контрольные цифры приема_магистратура.pdf", 'rb'), reply_markup=markup_reply_mag)
 
     elif a.data == 'back_mag':
         a.data = 'mag'
@@ -284,20 +320,26 @@ def start_answer(a):
         markup_reply14.add(bt_1, bt_2)
         markup_reply14.add(bt_3)
         markup_reply14.add(bt_4)
-        bot.send_message(a.message.chat.id, "Могу быть ещё чем-то полезен?", reply_markup=markup_reply14)
+        bot.send_message(a.message.chat.id, "Уфимский филиал Финуниверситета даёт возможность получить диплом *Средне профессионального образования*", reply_markup=markup_reply14, parse_mode='Markdown')
 
     elif a.data == 'spec_spo':
         markup_reply_cpo = types.InlineKeyboardMarkup()
         bt_1 = types.InlineKeyboardButton(text='Назад', callback_data='back_spo')
         markup_reply_cpo.add(bt_1)
         bot.send_message(a.message.chat.id, '''В нашем университете имеются следующие направления подготовки специалистов:
-                    38.02.07 Банковское дело
-                    38.02.06 Финансы
-                    38.02.01 Экономика и бухгалтерский учет  (по отраслям)
-                    38.02.02 Страховое дело  (по отраслям)
-                    09.02.05 Прикладная информатика (по отраслям)
-                    40.02.01 Право и организация социального обеспечения
 
+38.02.07 Банковское дело
+        
+38.02.06 Финансы
+                    
+38.02.01 Экономика и бухгалтерский учет  (по отраслям)
+
+38.02.02 Страховое дело  (по отраслям)
+                    
+09.02.05 Прикладная информатика (по отраслям)
+                    
+40.02.01 Право и организация социального обеспечения
+                    
 Ознакомиться с программами обучения вы можете по [ссылке](http://www.fa.ru/fil/ufa/pk/spo/Pages/specs.aspx)''',
                          parse_mode="Markdown", disable_web_page_preview='true', reply_markup = markup_reply_cpo)
 
@@ -316,17 +358,7 @@ def start_answer(a):
     elif a.data == "back_spo":
         a.data = 'cpo'
         return start_answer(a)
-
-
-
-
-
-
-
-
-        
-
-
+    
 @bot.message_handler(content_types=['text'])
 def send_text(message):
     if message.text.lower() == 'старт' or message.text.lower() == 'привет' or message.text.lower() == "start":
