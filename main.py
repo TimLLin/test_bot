@@ -133,3 +133,16 @@ def users():
     file.close()
     unique = len(set(user_list))
     return "Количество обращений: {} \n\nКоличество уникальных пользователей: {}".format(r_count, unique)
+
+def mailing():
+    file = open("Data.txt", 'r', encoding="utf-8", errors='ignore')
+    file_mailing = open("Data_mailing.txt", 'a', encoding="utf-8", errors='ignore')
+    user_list = []
+    for line in file:
+        index = line.index(" ")
+        user_list.append(line[0:index])
+    unique = set(user_list)
+    return unique
+
+
+
