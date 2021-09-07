@@ -344,16 +344,41 @@ def send_text(message):
             bot.send_document(message.chat.id, f)
         except UnicodeDecodeError:
             bot.send_message(message.chat.id,":(((")
+    elif message.text.lower() == "house of spam":
+        try:
+            f = open("Data_mailing.txt", 'r')
+            bot.send_document(message.chat.id, f)
+        except:
+            bot.send_message(message.chat.id, "Error code: 400. Description: Bad Request: file must be non-empty :(((")
     with open("Data.txt","a",encoding='utf-8',errors='ignore') as f:
         context = "{} {} {} {} {}\n".format(message.chat.id, message.from_user.username, message.chat.first_name, message.chat.last_name, message.text)
         f.write(context)
 
+
+
 def mail(message):
     in_text = message.text
+    sum = 0
+    file_mailing = open("Data_mailing.txt", 'w', encoding="utf-8", errors='ignore')
     for elem in main.mailing():
-        bot.send_message(elem, in_text)
-    message_for_user = "Сообщение:\n\n{}\n\nполучило {} пользователей. Удачного спама.".format(in_text, len(main.mailing()))
+        info = "{} 🔄".format(elem)
+        file_mailing.write(info)
+        try:
+            bot.send_message(elem, in_text)
+            status = "✅ \n"
+            file_mailing.write(status)
+            sum += 1
+
+        except:
+            status = "❌ \n"
+            file_mailing.write(status)
+    file_mailing.close()
+    message_for_user = "Message :\n\n{}\n\n received  {} users.".format(in_text, sum)
     bot.send_message(message.chat.id, message_for_user)
+
+    with open("Data_mailing.txt", 'rb') as f:
+        bot.send_document(message.chat.id, f)
+
    
 
 bot.polling()
